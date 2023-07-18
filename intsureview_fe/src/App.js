@@ -1,13 +1,15 @@
 import "./App.css";
 
 import Header from "./Header";
+import Central from "./Central";
 
-function App() {
+const App = () => {
   return (
     <div className="App">
       <Header />
+      <Central />
     </div>
   );
-}
+};
 
 export default App;
