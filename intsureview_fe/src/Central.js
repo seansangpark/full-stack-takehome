@@ -8,6 +8,7 @@ const Central = () => {
     email: "",
     isSubscribed: false,
   });
+  const [emailError, setEmailError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,6 +23,13 @@ const Central = () => {
     e.preventDefault();
 
     // handle email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setEmailError("Please enter a valid email address.");
+      return;
+    }
+
+    setEmailError("");
 
     console.log({ formData });
     setFormData({
@@ -45,6 +53,7 @@ const Central = () => {
             value={formData.firstName}
             onChange={handleChange}
             placeholder="Enter your first name"
+            required
           />
         </label>
         <br />
@@ -56,6 +65,7 @@ const Central = () => {
             value={formData.lastName}
             onChange={handleChange}
             placeholder="Enter your last name"
+            required
           />
         </label>
         <br />
@@ -66,6 +76,7 @@ const Central = () => {
             name="birthday"
             value={formData.birthday}
             onChange={handleChange}
+            required
           />
         </label>
         <br />
@@ -77,7 +88,9 @@ const Central = () => {
             value={formData.email}
             onChange={handleChange}
             placeholder="Enter your email"
+            required
           />
+          <p className="error-message">{emailError}</p>
         </label>
         <br />
         <label>
