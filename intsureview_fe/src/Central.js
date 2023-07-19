@@ -1,4 +1,13 @@
 import React, { useState } from "react";
+import {
+  Box,
+  Heading,
+  FormControl,
+  FormLabel,
+  Input,
+  Select,
+  Button,
+} from "@chakra-ui/react";
 
 const Central = () => {
   const [formData, setFormData] = useState({
@@ -19,7 +28,7 @@ const Central = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // handle email validation
@@ -31,7 +40,26 @@ const Central = () => {
 
     setEmailError("");
 
+    try {
+      const response = await fetch("http://localhost:8000/users/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        console.log("User registration successful!");
+      } else {
+        console.error("Failed to register user.");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+
     console.log({ formData });
+
     setFormData({
       firstName: "",
       lastName: "",
@@ -42,78 +70,86 @@ const Central = () => {
   };
 
   return (
-    <div>
-      <h2>Registration Page</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          First Name:
-          <input
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            placeholder="Enter your first name"
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Last Name:
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            placeholder="Enter your last name"
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Birthday:
-          <input
-            type="date"
-            name="birthday"
-            value={formData.birthday}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Email:
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Enter your email"
-            required
-          />
-          <p className="error-message">{emailError}</p>
-        </label>
-        <br />
-        <label>
-          Want to subscribe?
-          <select
-            name="isSubscribed"
-            value={formData.isSubscribed}
-            onChange={handleChange}
+    <Box
+      as="form"
+      mt={4}
+      onSubmit={handleSubmit}
+    >
+      <Heading
+        as="h2"
+        size="lg"
+        mb={4}
+      >
+        Registration Form
+      </Heading>
+      <FormControl mb={4}>
+        <FormLabel>First Name</FormLabel>
+        <Input
+          type="text"
+          name="firstName"
+          value={formData.firstName}
+          onChange={handleChange}
+          placeholder="Enter your first name"
+          required
+        />
+      </FormControl>
+      <FormControl mb={4}>
+        <FormLabel>Last Name</FormLabel>
+        <Input
+          type="text"
+          name="lastName"
+          value={formData.lastName}
+          onChange={handleChange}
+          placeholder="Enter your last name"
+          required
+        />
+      </FormControl>
+      <FormControl mb={4}>
+        <FormLabel>Birthday</FormLabel>
+        <Input
+          type="date"
+          name="birthday"
+          value={formData.birthday}
+          onChange={handleChange}
+          required
+        />
+      </FormControl>
+      <FormControl mb={4}>
+        <FormLabel>Email</FormLabel>
+        <Input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Enter your email"
+          required
+        />
+        <p className="email-error-message">{emailError}</p>
+      </FormControl>
+      <FormControl mb={4}>
+        <FormLabel>Want to subscribe?</FormLabel>
+        <Select
+          name="isSubscribed"
+          value={formData.isSubscribed}
+          onChange={handleChange}
+        >
+          <option
+            value=""
+            disabled
           >
-            <option
-              value=""
-              disabled
-            >
-              Select an option
-            </option>
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
-          </select>
-        </label>
-        <br />
-        <button type="submit">Register</button>
-      </form>
-    </div>
+            Select an option
+          </option>
+          <option value={true}>Yes</option>
+          <option value={false}>No</option>
+        </Select>
+      </FormControl>
+      <Button
+        type="submit"
+        colorScheme="teal"
+      >
+        Register
+      </Button>
+    </Box>
   );
 };
 
