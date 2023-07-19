@@ -28,7 +28,7 @@ const Central = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // handle email validation
@@ -40,7 +40,26 @@ const Central = () => {
 
     setEmailError("");
 
+    try {
+      const response = await fetch("http://localhost:8000/users/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        console.log("User registration successful!");
+      } else {
+        console.error("Failed to register user.");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+
     console.log({ formData });
+
     setFormData({
       firstName: "",
       lastName: "",
