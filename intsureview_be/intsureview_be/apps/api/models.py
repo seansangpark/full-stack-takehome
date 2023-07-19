@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class User(models.Model):
     firstName = models.CharField(max_length=100)
     lastName = models.CharField(max_length=100)
@@ -9,3 +10,6 @@ class User(models.Model):
 
     def __str__(self):
         return self.firstName
+
+    class Meta:
+        db_table = "user"
